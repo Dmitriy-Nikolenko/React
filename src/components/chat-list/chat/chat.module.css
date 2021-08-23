@@ -1,0 +1,19 @@
+.icon,
+.text {
+  color: blanchedalmond;
+ 
+  
+}
+
+.text span {
+  font-size: 14px;
+}
+
+.description {
+  width: 100%;
+  background-color:#2b5278  
+}
+
+.description .text:last-child {
+  text-align: right;
+}
