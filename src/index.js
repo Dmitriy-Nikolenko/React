@@ -1,27 +1,21 @@
-import {ThemeProvider, createTheme} from '@material-ui/core';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter} from "react-router-dom"
 import { App } from './App';
 import { Provider} from "react-redux";
-import { ProfileStore} from './components'
-
-const theme = createTheme({
-  dark: {
-    color: "dark"
-  },
-  light: {
-    color: "#999"
-  }
-})
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistore } from './components';
+import "./global.css";
 
 ReactDOM.render(
-  <React.StrictMode>
-  <Provider store={ProfileStore}>
-  <ThemeProvider theme = {theme}>
-     <App />  
-  </ThemeProvider>  
-  </Provider>  
-  </React.StrictMode>,
-  document.getElementById('root')
-);
-
+  <>
+    <Provider store={store}>
+     <PersistGate loading={null} persistor={persistore}>
+      <BrowserRouter>        
+        <App />        
+      </BrowserRouter>
+     </PersistGate>      
+    </Provider>
+  </>,
+  document.getElementById("root"),
+)
