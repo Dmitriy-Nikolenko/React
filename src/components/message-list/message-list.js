@@ -1,69 +1,92 @@
-import React from 'react';
-import {Button, makeStyles, Input} from '@material-ui/core';
-import { useState, useEffect } from "react";
-import { Send } from '@material-ui/icons';
+import { Input, InputAdornment, makeStyles } from "@material-ui/core"
+import { Send } from "@material-ui/icons"
+import { useEffect, useRef, useCallback } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { useParams } from "react-router-dom"
+import { handleChangeMessageValue } from "../../store/conversations"
+import { sendMessageThunk } from "../../store/middlewares/thunk"
+import { Message } from "./message"
+import styles from "./message-list.module.css"
 
-const useStyles = makeStyles((theme) => ({
-    button: {
-      margin: theme.spacing(1),
+const useStyles = makeStyles(() => {
+  return {
+    input: {
+      color: "#9a9fa1",
+      padding: "10px 15px",
+      fontSize: " 15px",
     },
-  }));
+  }
+})
 
 export const MessageList = () => {
-    const [messageList, setMessageList] = useState([])
+  const s = useStyles()
+  const { roomId } = useParams()
 
-    const [value, setValue] = useState ("")
-    
+  const dispatch = useDispatch()
 
-      
-    const handleSendMessage = () => {
-        setMessageList((state) => [...state, {value, author: "User"}])
-        setValue("");
-       };
-    const classes = useStyles();
-    
-    useEffect(() => {  
-        const lastMessageList = messageList[messageList.length - 1]
-
-        if (lastMessageList?.author === "User") {
-            setTimeout(() => {
-                setMessageList((state) => [
-                    ...state, {
-                        value: "Ваше сообщение добавлено", author: "Bot"
-                    }
-                ])
-            }, 500)
-        }
-
-    }, [messageList])
-
+  const messages = useSelector((state) => {
+    console.log("update")
+    return state.messages.messages[roomId] || []
+  })
+  const value = useSelector((state) => {
+    console.log("update")
     return (
-        <div >
-            <ul>
-                {messageList.map((message, id) => <li key={id}>{message.value} = {message.author}</li>)}
-            </ul>
-    <Input 
-           placeholder="Введите сообщение" 
-           inputProps={{ 'aria-label': 'description' }} 
-           autoFocus={true} 
-           value={value} 
-           onChange = {(e) => setValue(e.target.value)}
-           >
-
-    </Input>
-                       
-    <Button
-            onClick={handleSendMessage}
-            variant="contained"
-            color="primary"
-            className={classes.button}            
-      >
-        Send
-        <Send></Send>
-      </Button>
-        
-        </div>
+      state.conversations.conversations.find(
+        (conversation) => conversation.title === roomId,
+      )?.value || ""
     )
-        
-    
+  })
+
+  const ref = useRef()
+
+  const handleSendMessage = () => {
+    if (value) {
+      dispatch(sendMessageThunk({ author: "User", message: value }, roomId))
+      
+    }
+  }
+
+  const handlePressInput = ({ code }) => {
+    if (code === "Enter") {
+      handleSendMessage()
+    }
+  }
+
+  const handleScrollBottom = useCallback(() => {
+    if (ref.current) {
+      ref.current.scrollTo(0, ref.current.scrollHeight)
+    }
+  }, [])
+
+  useEffect(() => {
+    handleScrollBottom()
+  }, [handleScrollBottom])
+
+  return (
+    <>
+      <div ref={ref}>
+        {messages.map((message, id) => (
+          <Message key={id} {...message} />
+        ))}
+      </div>
+
+      <Input
+        className={s.input}
+        value={value}
+        onChange={(e) =>
+          dispatch(handleChangeMessageValue(e.target.value, roomId))
+        }
+        onKeyPress={handlePressInput}
+        fullWidth={true}
+        placeholder="Введите сообщение..."
+        endAdornment={
+          <InputAdornment position="end">
+            {value && (
+              <Send onClick={handleSendMessage} className={styles.icon} />
+            )}
+          </InputAdornment>
+        }
+      />
+    </>
+  )
 }

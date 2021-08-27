@@ -19,4 +19,4 @@ export const profileReducer = (state = initialSate, action) => {
             return state;
     }
    
-}; //чистая функция, которая не выполняет никаких запросов
+};

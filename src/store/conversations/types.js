@@ -1,0 +1,5 @@
+export const HANDLE_CHANGE_MESSAGE_VALUE = "@conversations/handle change value"
+export const CLEAR_MESSAGE_VALUE = "@conversations/clear message value"
+export const GET_CONVERSATIONS_START = "@conversations/start_CONVERSATIONS"
+export const GET_CONVERSATIONS_SUCCESS = "@conversations/success_CONVERSATIONS"
+export const GET_CONVERSATIONS_ERROR = "@conversations/error_CONVERSATIONS"
