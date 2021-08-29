@@ -1,6 +1,3 @@
-export * from "./profileButton";
-export * from "./profile"
-export * from "./reducer"
-export * from "./actions"
-
-
+export * from "./profile";
+export * from "../buttons/button-profile";
+export * from "../../store/profile/index";

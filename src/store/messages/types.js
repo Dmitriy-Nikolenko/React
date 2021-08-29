@@ -1,0 +1,6 @@
+export const SEND_MESSAGE_START = "@messages/start_send message"
+export const SEND_MESSAGE_SUCCES = "@messages/succes_send message"
+export const SEND_MESSAGE_ERROR = "@messages/error_send message"
+export const GET_MESSAGES_START = "@conversations/start_get messages"
+export const GET_MESSAGES_SUCCESS = "@conversations/success_get messages"
+export const GET_MESSAGES_ERROR = "@conversations/error_get messages"
