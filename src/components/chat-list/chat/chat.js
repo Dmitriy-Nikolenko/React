@@ -1,8 +1,4 @@
-import {
-  ListItem, 
-  ListItemText,
-  makeStyles,
-} from "@material-ui/core"
+import { ListItem, ListItemText, makeStyles } from "@material-ui/core"
 import { memo } from "react"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
